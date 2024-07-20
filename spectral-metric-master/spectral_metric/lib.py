@@ -8,8 +8,7 @@ import scipy as sp
 import scipy.stats
 from sklearn.metrics import pairwise_distances
 
-#from spectral_metric.my_types import Array, SimilarityArrays
-from my_types import Array, SimilarityArrays
+from spectral_metric.types import Array, SimilarityArrays
 
 log = logging.getLogger(__name__)
 pjoin = os.path.join
