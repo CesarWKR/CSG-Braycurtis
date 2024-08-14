@@ -1,2 +1,5 @@
 __pycache__
 CIFAR-10-Corrupted
+Pruebas similitud entre muestras/Dos clases a nivel de muestra con CSG correlated.ipynb
+Pruebas similitud entre muestras/Dos clases a nivel de muestra con CSG y Mahalanobis.ipynb
+Pruebas similitud entre muestras/Dos clases a nivel de muestra con CSG y SSIM.ipynb
