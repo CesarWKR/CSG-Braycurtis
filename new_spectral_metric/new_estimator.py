@@ -65,14 +65,37 @@ class CumulativeGradientEstimator(object):
             for j in range(data.shape[0]):
                 self.M[i, j] = 1 - scipy.spatial.distance.braycurtis(data[i], data[j])
 
+        # for i, j in product(range(self.n_class), range(self.n_class)):
+        #     class_i_indices = self.class_indices[i]
+        #     class_j_indices = self.class_indices[j]
+        #     similarity_matrix = np.zeros((len(class_i_indices), len(class_j_indices)))
+        #     for idx_i, i_idx in enumerate(class_i_indices):
+        #         for idx_j, j_idx in enumerate(class_j_indices):
+        #             similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(data[i_idx], data[j_idx])
+        #     self.P[(i, j)] = similarity_matrix   # Compute the matriz to compare the pair classes
+
+        # for i, j in product(range(self.n_class), range(self.n_class)):
+        #     if i != j:  # Solo comparar clases diferentes
+        #         class_i_indices = self.class_indices[i]
+        #         class_j_indices = self.class_indices[j]
+        #         similarity_matrix = np.zeros((len(class_i_indices), len(class_j_indices)))
+        #         for idx_i, i_idx in enumerate(class_i_indices):
+        #             for idx_j, j_idx in enumerate(class_j_indices):
+        #                 similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(data[i_idx], data[j_idx])
+        #         self.P[(i, j)] = similarity_matrix   # Almacena la matriz de similitud para clases diferentes
+
+
         for i, j in product(range(self.n_class), range(self.n_class)):
-            class_i_indices = self.class_indices[i]
-            class_j_indices = self.class_indices[j]
-            similarity_matrix = np.zeros((len(class_i_indices), len(class_j_indices)))
-            for idx_i, i_idx in enumerate(class_i_indices):
-                for idx_j, j_idx in enumerate(class_j_indices):
-                    similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(data[i_idx], data[j_idx])
-            self.P[(i, j)] = similarity_matrix   # Compute the matriz to compare the pair classes
+            if i < j and i != j:  # Solo comparar clases diferentes y evitar la duplicación
+                class_i_indices = self.class_indices[i]
+                class_j_indices = self.class_indices[j]
+                similarity_matrix = np.zeros((len(class_i_indices), len(class_j_indices)))
+                for idx_i, i_idx in enumerate(class_i_indices):
+                    for idx_j, j_idx in enumerate(class_j_indices):
+                        similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(data[i_idx], data[j_idx])
+                self.P[(i, j)] = similarity_matrix   # Almacena la matriz de similitud para clases pares
+                #self.P[(j, i)] = similarity_matrix.T  # Almacena la matriz transpuesta para la comparación inversa
+
 
     def _csg_from_evals(self, evals: np.ndarray) -> float:
         grads = evals[1:] - evals[:-1]
