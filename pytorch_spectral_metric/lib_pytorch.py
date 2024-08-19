@@ -4,10 +4,12 @@ from collections import defaultdict
 from typing import Tuple, Dict  
 
 import cupy as cp  
+import numpy as np
 import scipy as sp  
 import scipy.stats  
 from sklearn.metrics import pairwise_distances  
-import torch  
+import torch
+from pytorch_spectral_metric.my_types_pytorch import SimilarityArrays  
 
 # Define tus tipos aquí como en el módulo original  
 # Array y SimilarityArrays deben ser definidos o importados si están en otro archivo.  

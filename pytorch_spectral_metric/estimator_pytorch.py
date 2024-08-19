@@ -5,7 +5,7 @@ import scipy.spatial
 from numpy.linalg import LinAlgError  
 from scipy.sparse.csgraph import laplacian  
 import torch  
-from new_lib import find_samples, compute_expectation_with_monte_carlo  
+from lib_pytorch import find_samples, compute_expectation_with_monte_carlo  
 
 log = logging.getLogger(__name__)  
 
