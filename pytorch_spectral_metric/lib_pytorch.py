@@ -9,7 +9,7 @@ import scipy as sp
 import scipy.stats  
 from sklearn.metrics import pairwise_distances  
 import torch  
-from pytorch_spectral_metric.my_types_pytorch import SimilarityArrays  
+from my_types_pytorch import SimilarityArrays  
 
 log = logging.getLogger(__name__)  
 pjoin = os.path.join  
