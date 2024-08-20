@@ -80,18 +80,24 @@ class CumulativeGradientEstimator:
                         similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(cp.asnumpy(data[i_idx]), cp.asnumpy(data[j_idx]))  
                 self.P[(i, j)] = similarity_matrix  
 
-    def _csg_from_evals(self, evals):  
+def _csg_from_evals(self, evals):  
         grads = evals[1:] - evals[:-1]  
         ratios = grads / (cp.arange(grads.shape[-1], 0, -1) + 1)  
-        
+
         # Convierte a NumPy para realizar la acumulación  
         ratios_np = cp.asnumpy(ratios)  
+
+        # Asegúrate de que `ratios_np` sea al menos bidimensional  
+        if ratios_np.ndim == 1:  
+            ratios_np = ratios_np.reshape(1, -1)  
+
+        # Acumula y suma a través del eje correcto  
         csg_np = np.maximum.accumulate(ratios_np, axis=-1).sum(axis=1)  
-        
+
         # Convierte de nuevo a CuPy  
         csg = cp.asarray(csg_np)  
-        
-        return csg 
+
+        return csg  
 
 if __name__ == "__main__":  
     pass
