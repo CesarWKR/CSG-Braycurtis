@@ -69,12 +69,19 @@ def find_samples(
     indices = cp.arange(len(data))  
     
     for k in cp.unique(target):  
+        # Verifica el tipo y el valor de `k` para asegurarte que es hashable  
+        print(f"Type of k: {type(k)}, Value of k: {k}")  
+        
+        # Forza k a ser un entero en caso de ser necesario  
+        k = int(k)   
+
         indices_in_cls = rng.permutation(cp.asnumpy(indices[target == k].get()))  
         to_take = min(M if M > 1 else int(M * len(indices_in_cls)), len(indices_in_cls))  
         class_samples[k] = data[indices_in_cls[:to_take]]  
         class_indices[k] = indices_in_cls[:to_take]  
     
     return class_samples, class_indices  
+    
 
 def get_cummax(eigens: cp.ndarray) -> Tuple[float, float]:  
     def mean_confidence_interval(data, confidence=0.95):  
