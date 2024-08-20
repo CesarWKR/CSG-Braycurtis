@@ -32,7 +32,14 @@ def compute_expectation_with_monte_carlo(
     expectation = cp.zeros([n_class, n_class])  
 
     def similarities(k):  
-        return cp.array(pairwise_distances(cp.asnumpy(class_samples[k]), cp.asnumpy(data), metric=distance))  
+        # Asegúrate de que las matrices sean bidimensionales  
+        samples = cp.asnumpy(class_samples[k])  
+        if samples.ndim > 2:  
+            samples = samples.reshape(samples.shape[0], -1)  # Aplana a 2 dimensiones  
+        dataset = cp.asnumpy(data)  
+        if dataset.ndim > 2:  
+            dataset = dataset.reshape(dataset.shape[0], -1)  # Aplana a 2 dimensiones  
+        return cp.array(pairwise_distances(samples, dataset, metric=distance))  
 
     for class_ix in class_samples:  
         all_similarities = similarities(class_ix)  
@@ -57,7 +64,7 @@ def compute_expectation_with_monte_carlo(
 
     log.info("----------------Diagonal--------------------")  
     log.info(cp.asnumpy(cp.round(cp.diagonal(expectation), 4)))  
-    return expectation, similarity_arrays  
+    return expectation, similarity_arrays   
 
 def find_samples(  
     data: cp.ndarray, target: cp.ndarray, n_class: int, M=100, seed=None  
