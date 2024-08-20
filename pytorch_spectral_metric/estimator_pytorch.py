@@ -1,6 +1,7 @@
 import logging  
 from itertools import product  
 import cupy as cp  
+import numpy as np
 import scipy.spatial  
 from numpy.linalg import LinAlgError  
 from scipy.sparse.csgraph import laplacian  
@@ -79,11 +80,18 @@ class CumulativeGradientEstimator:
                         similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(cp.asnumpy(data[i_idx]), cp.asnumpy(data[j_idx]))  
                 self.P[(i, j)] = similarity_matrix  
 
-    def _csg_from_evals(self, evals: cp.ndarray) -> float:  
+    def _csg_from_evals(self, evals):  
         grads = evals[1:] - evals[:-1]  
         ratios = grads / (cp.arange(grads.shape[-1], 0, -1) + 1)  
-        csg = cp.maximum.accumulate(ratios, -1).sum(1)  
-        return csg  
+        
+        # Convierte a NumPy para realizar la acumulación  
+        ratios_np = cp.asnumpy(ratios)  
+        csg_np = np.maximum.accumulate(ratios_np, axis=-1).sum(axis=1)  
+        
+        # Convierte de nuevo a CuPy  
+        csg = cp.asarray(csg_np)  
+        
+        return csg 
 
 if __name__ == "__main__":  
     pass
