@@ -60,7 +60,11 @@ class CumulativeGradientEstimator:
         self.M = cp.zeros((data.shape[0], data.shape[0]))  
         for i in range(data.shape[0]):  
             for j in range(data.shape[0]):  
-                self.M[i, j] = 1 - scipy.spatial.distance.braycurtis(cp.asnumpy(data[i]), cp.asnumpy(data[j]))  
+                # Asegúrate de que 'data[i]' y 'data[j]' son vectores 1-D.  
+                data_i_vector = cp.asnumpy(data[i]).flatten()  
+                data_j_vector = cp.asnumpy(data[j]).flatten()  
+                
+                self.M[i, j] = 1 - scipy.spatial.distance.braycurtis(data_i_vector, data_j_vector)  
 
         for i in range(self.n_class):  
             class_indices = self.class_indices[i]  
