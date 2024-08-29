@@ -102,13 +102,49 @@ class SimilarityCalculator:
     def __init__(self, device='cuda'):  
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')  
 
+    # def compute_similarity_matrix(self, data):  
+    #     data_torch = torch.tensor(data).to(self.device)  
+    #     diffs = data_torch[:, None, :] - data_torch[None, :, :]  
+    #     norms = torch.norm(diffs, dim=-1)  
+    #     max_norm = norms.max()  
+    #     similarity_matrix = 1 - (norms / max_norm)  
+    #     return similarity_matrix.cpu().numpy()  
+
+    # def compute_intra_class_similarity(self, data, class_indices):  
+    #     similarities = {}  
+    #     for i, indices in class_indices.items():  
+    #         class_data = data[indices]  
+    #         similarities[i] = self.compute_similarity_matrix(class_data)  
+    #     return similarities  
+
+    # def compute_pair_class_similarity(self, data, class_indices):  
+    #     pair_similarities = {}  
+    #     for i, indices_i in class_indices.items():  
+    #         for j, indices_j in class_indices.items():  
+    #             if i < j:  
+    #                 data_i = data[indices_i]  
+    #                 data_j = data[indices_j]  
+    #                 data_i_torch = torch.tensor(data_i).to(self.device)  
+    #                 data_j_torch = torch.tensor(data_j).to(self.device)  
+    #                 pair_diff = data_i_torch[:, None, :] - data_j_torch[None, :, :]  
+    #                 pair_norms = torch.norm(pair_diff, dim=-1)  
+    #                 max_pair_norm = pair_norms.max()  
+    #                 similarity_matrix = 1 - (pair_norms / max_pair_norm)  
+    #                 pair_similarities[(i, j)] = similarity_matrix.cpu().numpy()  
+    #     return pair_similarities  
+
     def compute_similarity_matrix(self, data):  
-        data_torch = torch.tensor(data).to(self.device)  
-        diffs = data_torch[:, None, :] - data_torch[None, :, :]  
-        norms = torch.norm(diffs, dim=-1)  
-        max_norm = norms.max()  
-        similarity_matrix = 1 - (norms / max_norm)  
-        return similarity_matrix.cpu().numpy()  
+        # Convertir los datos a un arreglo de NumPy si es necesario  
+        data_np = np.array(data)  
+        num_samples = data_np.shape[0]  
+        similarity_matrix = np.zeros((num_samples, num_samples))  
+
+        # Calcular la matriz de similitud usando Bray-Curtis  
+        for i in range(num_samples):  
+            for j in range(num_samples):  
+                similarity_matrix[i, j] = 1 - scipy.spatial.distance.braycurtis(data_np[i], data_np[j])  
+
+        return similarity_matrix  
 
     def compute_intra_class_similarity(self, data, class_indices):  
         similarities = {}  
@@ -124,14 +160,18 @@ class SimilarityCalculator:
                 if i < j:  
                     data_i = data[indices_i]  
                     data_j = data[indices_j]  
-                    data_i_torch = torch.tensor(data_i).to(self.device)  
-                    data_j_torch = torch.tensor(data_j).to(self.device)  
-                    pair_diff = data_i_torch[:, None, :] - data_j_torch[None, :, :]  
-                    pair_norms = torch.norm(pair_diff, dim=-1)  
-                    max_pair_norm = pair_norms.max()  
-                    similarity_matrix = 1 - (pair_norms / max_pair_norm)  
-                    pair_similarities[(i, j)] = similarity_matrix.cpu().numpy()  
-        return pair_similarities  
+                    num_i = len(data_i)  
+                    num_j = len(data_j)  
+                    similarity_matrix = np.zeros((num_i, num_j))  
+
+                    # Calcular la matriz de similitud entre pares de clases usando Bray-Curtis  
+                    for idx_i in range(num_i):  
+                        for idx_j in range(num_j):  
+                            similarity_matrix[idx_i, idx_j] = 1 - scipy.spatial.distance.braycurtis(data_i[idx_i], data_j[idx_j])  
+
+                    pair_similarities[(i, j)] = similarity_matrix  
+
+        return pair_similarities
 
 
 class CumulativeGradientEstimator(object):  
