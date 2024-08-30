@@ -468,7 +468,7 @@ class SimilarityCalculator:
     def __init__(self, device='cuda'):  
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')  
 
-    def bray_curtis_similarity_blocked(self, data, block_size=50):  
+    def bray_curtis_similarity_blocked(self, data, block_size=100):  
         data_torch = torch.tensor(data, device=self.device, dtype=torch.float16)  
         num_samples = data_torch.size(0)  
         similarity_matrix = torch.zeros((num_samples, num_samples), device='cpu', dtype=torch.float16)  
@@ -495,17 +495,17 @@ class SimilarityCalculator:
                 
         return similarity_matrix.numpy()  
 
-    def compute_similarity_matrix(self, data, block_size=50):  
+    def compute_similarity_matrix(self, data, block_size=100):  
         return self.bray_curtis_similarity_blocked(data, block_size=block_size)  
 
-    def compute_intra_class_similarity(self, data, class_indices, block_size=1000):  
+    def compute_intra_class_similarity(self, data, class_indices, block_size=100):  
         similarities = {}  
         for i, indices in class_indices.items():  
             class_data = data[indices]  
             similarities[i] = self.compute_similarity_matrix(class_data, block_size=block_size)  
         return similarities  
 
-    def compute_pair_class_similarity(self, data, class_indices, block_size=1000):  
+    def compute_pair_class_similarity(self, data, class_indices, block_size=100):  
         pair_similarities = {}  
         for i, indices_i in class_indices.items():  
             for j, indices_j in class_indices.items():  
