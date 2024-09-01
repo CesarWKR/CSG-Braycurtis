@@ -13,7 +13,7 @@ from new_lib import find_samples, compute_expectation_with_monte_carlo
 log = logging.getLogger(__name__)  
 
 class SimilarityCalculator:  
-    def __init__(self, device='cuda'):  
+    def _init_(self, device='cuda'):  
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')  
 
     def bray_curtis_similarity_blocked(self, data, block_size=100):  
@@ -53,43 +53,12 @@ class SimilarityCalculator:
             similarities[i] = self.compute_similarity_matrix(class_data, block_size=block_size)  
         return similarities  
 
-    def compute_pair_class_similarity(self, data, class_indices, block_size=100):  
-        pair_similarities = {}  
-        for i, indices_i in class_indices.items():  
-            for j, indices_j in class_indices.items():  
-                if i < j:  
-                    data_i = data[indices_i]  
-                    data_j = data[indices_j]  
-                    data_i_torch = torch.tensor(data_i, device=self.device, dtype=torch.float16)  
-                    data_j_torch = torch.tensor(data_j, device=self.device, dtype=torch.float16)  
-
-                    similarity_matrix = torch.zeros((data_i_torch.size(0), data_j_torch.size(0)), device='cpu', dtype=torch.float16)  
-
-                    for start_idx in range(0, data_i_torch.size(0), block_size):  
-                        end_idx = min(start_idx + block_size, data_i_torch.size(0))  
-                        batch_data_i = data_i_torch[start_idx:end_idx]  
-
-                        data_i_diff = batch_data_i.unsqueeze(1) - data_j_torch  
-                        abs_diff_sum = torch.sum(torch.abs(data_i_diff), dim=-1)  
-
-                        data_i_sum = batch_data_i.unsqueeze(1) + data_j_torch  
-                        abs_data_sum = torch.sum(torch.abs(data_i_sum), dim=-1)  
-
-                        similarity_batch = 1 - (abs_diff_sum / abs_data_sum)  
-                        similarity_matrix[start_idx:end_idx] = similarity_batch.cpu()  
-
-                    pair_similarities[(i, j)] = similarity_matrix.numpy()  
-
-        return pair_similarities  
-
 class CumulativeGradientEstimator:  
     def __init__(self, M_sample=250, k_nearest=10, distance="euclidean"):  
         self.M_sample = M_sample  
         self.k_nearest = k_nearest  
         self.distance = distance  
-        self.P = {}  
         self.C = {}  
-        self.M = None  
         self.similarity_calculator = SimilarityCalculator()  # Initialize similarity calculator  
 
     def fit(self, data, target):  
@@ -131,10 +100,8 @@ class CumulativeGradientEstimator:
             self.evecs = np.ones([self.n_class, self.n_class]) * np.nan  
             self.csg = np.nan  
 
-        # Calculate the similarity matrices using the SimilarityCalculator  
-        self.M = self.similarity_calculator.compute_similarity_matrix(data)  
+        # Calculate the intra-class similarity matrix using the SimilarityCalculator  
         self.C = self.similarity_calculator.compute_intra_class_similarity(data, self.class_indices)  
-        self.P = self.similarity_calculator.compute_pair_class_similarity(data, self.class_indices)  
 
     def _csg_from_evals(self, evals: np.ndarray) -> float:  
         grads = evals[1:] - evals[:-1]  
