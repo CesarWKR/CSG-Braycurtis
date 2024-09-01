@@ -1,19 +1,17 @@
-import logging
-from itertools import product
+import logging  
+from itertools import product  
 import torch  
-import cupy
-import numpy as np
-import scipy
-import scipy.spatial
-from numpy.linalg import LinAlgError
-from scipy.sparse.csgraph import laplacian
-import pickle
-from new_lib import find_samples, compute_expectation_with_monte_carlo
+import numpy as np  
+import scipy  
+import scipy.spatial  
+from numpy.linalg import LinAlgError  
+from scipy.sparse.csgraph import laplacian  
+from new_lib import find_samples, compute_expectation_with_monte_carlo  
 
 log = logging.getLogger(__name__)  
 
 class SimilarityCalculator:  
-    def _init_(self, device='cuda'):  
+    def __init__(self, device='cuda'):  
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')  
 
     def bray_curtis_similarity_blocked(self, data, block_size=100):  
