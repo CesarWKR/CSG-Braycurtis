@@ -3,6 +3,7 @@ from itertools import product
 import torch  
 import numpy as np  
 import scipy  
+import scipy.spatial
 from scipy.spatial.distance import cosine  
 from scipy.sparse.csgraph import laplacian  
 from numpy.linalg import LinAlgError  
@@ -142,9 +143,9 @@ class CumulativeGradientEstimator:
 
     def _csg_from_evals(self, evals: np.ndarray) -> float:  
         grads = evals[1:] - evals[:-1]  
-        ratios = grads / (np.array([list(reversed(range(1, grads.shape[-1] + 1)))])) + 1  
+        ratios = grads / (np.array([list(reversed(range(1, grads.shape[-1] + 1)))]) + 1)  
         csg: float = np.maximum.accumulate(ratios, -1).sum(1)  
-        return csg  
+        return csg 
 
 if __name__ == "__main__":  
     pass
