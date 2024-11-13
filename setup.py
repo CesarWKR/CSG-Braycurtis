@@ -14,7 +14,7 @@ setup(
     ],  
     author="CesarWKR",  
     author_email="cesarwkr1@gmail.com",  
-    description="Descripción de tu paquete",  
+    description="Implementing the Bray-Curtis disimilarity in Spectral metric in order to compare the similarity between samples within a class (Intra-class)",  
     url="https://github.com/CesarWKR/CSG-Braycurtis.git",  
     classifiers=[  
         "Programming Language :: Python :: 3.10",  
