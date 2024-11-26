@@ -13,10 +13,25 @@ potential challenges for machine learning models.
 
 
 The first step is to install the library using pip as follows:
-```pip install new_spectral_metric``` bash 
+
+```pip install new_spectral_metric``` 
 
 Once installed, you can access the files that make up the library. The library provides functionality to compute similarity metrics at different levels:
 
 Intra-class similarity: Use new_estimator_intra_class (available within new_spectral_metric) to calculate the similarity between samples within the same class.
 Dataset-wide similarity: Use new_estimator_all_samples to compute similarity across all samples in the dataset.
 Alternatively, you can use new_estimator_complete, which combines both intra-class similarity and dataset-wide similarity into a single estimator for comprehensive analysis.
+
+
+```
+from new_spectral_metric import new_estimator_intra_class, new_estimator_all_samples, new_estimator_complete
+
+# Intra-class similarity 
+intra_class_similarity = new_estimator_intra_class(data, class_indices)  
+
+# All dataset similarity 
+all_samples_similarity = new_estimator_all_samples(data)  
+
+# Combinen similarity 
+complete_similarity = new_estimator_complete(data, class_indices) 
+```
