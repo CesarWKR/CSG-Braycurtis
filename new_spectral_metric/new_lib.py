@@ -8,7 +8,6 @@ import scipy as sp
 import scipy.stats
 from sklearn.metrics import pairwise_distances
 from new_spectral_metric.my_types import Array, SimilarityArrays
-#from my_types import Array, SimilarityArrays
 from .my_types import Array, SimilarityArrays
 
 log = logging.getLogger(__name__)

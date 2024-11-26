@@ -1,14 +1,12 @@
 import logging  
 from itertools import product  
 import torch  
-import cupy  
 import numpy as np  
 import scipy  
 import scipy.spatial  
 from numpy.linalg import LinAlgError  
 from scipy.sparse.csgraph import laplacian  
-import pickle  
-from new_lib import find_samples, compute_expectation_with_monte_carlo  
+from .new_lib import find_samples, compute_expectation_with_monte_carlo  
 
 log = logging.getLogger(__name__)  
 
@@ -46,7 +44,7 @@ class SimilarityCalculator:
     def compute_similarity_matrix(self, data, block_size=200):  
         return self.bray_curtis_similarity_blocked(data, block_size=block_size)  
 
-class CumulativeGradientEstimator:  
+class CumulativeGradientEstimator_All_samples:  
     def __init__(self, M_sample=250, k_nearest=10, distance="euclidean"):  
         self.M_sample = M_sample  
         self.k_nearest = k_nearest  

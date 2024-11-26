@@ -6,7 +6,7 @@ import scipy
 import scipy.spatial  
 from numpy.linalg import LinAlgError  
 from scipy.sparse.csgraph import laplacian  
-from new_lib import find_samples, compute_expectation_with_monte_carlo  
+from .new_lib import find_samples, compute_expectation_with_monte_carlo  
 
 log = logging.getLogger(__name__)  
 
@@ -51,7 +51,7 @@ class SimilarityCalculator:
             similarities[i] = self.compute_similarity_matrix(class_data, block_size=block_size)  
         return similarities  
 
-class CumulativeGradientEstimator:  
+class CumulativeGradientEstimator_Intra_class:  
     def __init__(self, M_sample=250, k_nearest=10, distance="euclidean"):  
         self.M_sample = M_sample  
         self.k_nearest = k_nearest  
