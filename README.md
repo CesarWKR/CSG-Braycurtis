@@ -13,7 +13,7 @@ potential challenges for machine learning models.
 
 
 The first step is to install the library using pip as follows:
-pip install new_spectral_metric
+```pip install new_spectral_metric``` bash 
 
 Once installed, you can access the files that make up the library. The library provides functionality to compute similarity metrics at different levels:
 
