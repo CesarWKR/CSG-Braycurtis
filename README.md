@@ -40,8 +40,9 @@ complete_similarity = new_estimator_complete(data, class_indices)
 ```
 
 
-This project is licensed under the MIT License. [See the](./LICENSE) file for more details.
+This project is licensed under the MIT License. [See the LICENSE](./LICENSE) file for more details.
 
 # Results
 
-You can see the tests performed at   
+You can see the tests performed in the folder [CSG and similarity](./CSG%20and%20similarity/).
+Inside this folder you will find the Jupiter optimized codes for each type of similarity (Intra-class, All dataset and combined).
