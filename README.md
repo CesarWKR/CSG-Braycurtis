@@ -27,11 +27,19 @@ Alternatively, you can use new_estimator_complete, which combines both intra-cla
 from new_spectral_metric import new_estimator_intra_class, new_estimator_all_samples, new_estimator_complete
 
 # Intra-class similarity 
+from new_spectral_metric.new_estimator_intra_class import CumulativeGradientEstimator_Intra_class
 intra_class_similarity = new_estimator_intra_class(data, class_indices)  
 
 # All dataset similarity 
+from new_spectral_metric.new_estimator_all_samples import CumulativeGradientEstimator_All_samples
 all_samples_similarity = new_estimator_all_samples(data)  
 
-# Combinen similarity 
+# Complete similarity 
+from new_spectral_metric.new_estimator_complete import CumulativeGradientEstimator_Complete
 complete_similarity = new_estimator_complete(data, class_indices) 
 ```
+
+
+
+
+
