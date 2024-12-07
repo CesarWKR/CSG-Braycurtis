@@ -40,6 +40,8 @@ complete_similarity = new_estimator_complete(data, class_indices)
 ```
 
 
+This project is licensed under the MIT License. [See the](./LICENSE) file for more details.
 
+# Results
 
-
+You can see the tests performed at   
