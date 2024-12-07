@@ -45,4 +45,8 @@ This project is licensed under the MIT License. [See the LICENSE](./LICENSE) fil
 # Results
 
 You can see the tests performed in the folder [CSG and similarity](./CSG%20and%20similarity/).
-Inside this folder you will find the Jupiter optimized codes for each type of similarity (Intra-class, All dataset and combined).
+Inside this folder you will find the Jupyter optimized codes for each type of similarity (Intra-class, All dataset and combined).
+
+If you want to use Colab you will have to organize the data numerically, since Colab organizes files using a lexicographical or alphabetical sort. This method sorts file names as if they were simple text strings, character by character, without considering the numerical meaning. On the other hand, 
+Jupyter organizes the files using a natural sort. This method takes into account numerical values within strings. Please note that the files where the tests were made are optimized for Jupyter Notebook.
+
