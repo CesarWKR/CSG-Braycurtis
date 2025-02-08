@@ -16,6 +16,10 @@ The first step is to install the library using pip as follows:
 
 ```pip install new_spectral_metric``` 
 
+If ```pip install new_spectral_metric``` does not work, try the following command:
+
+```pip install -e .``` or ```python setup.py install```
+
 Once installed, you can access the files that make up the library. The library provides functionality to compute similarity metrics at different levels:
 
 Intra-class similarity: Use new_estimator_intra_class (available within new_spectral_metric) to calculate the similarity between samples within the same class.
